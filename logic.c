@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
+#include <stdlib.h>
 
 #define widthBin 32
 #define widthOct 11
@@ -37,12 +39,16 @@ void doValid(struct AppContext* context) {
     context->flag = flag;
 }
 
-long convert_to_decimal(const char *num_str, int from_base) {
-    char *endptr;
-    long value = strtol(num_str, &endptr, from_base);
-    return value;
-}
+long convert_to_decimal(const char* str, int from_base) {
+    if (from_base == 10) {
+        return strtol(str, NULL, 10);
+    }
+    uint32_t raw = (uint32_t)strtoul(str, NULL, from_base);
 
+    int32_t signed_value = (int32_t)raw;
+
+    return (long)signed_value;
+}
 
 void unsigned_to_base(unsigned long num, int to_base, int width, char *result) {
     char buffer[33] = {0};
@@ -78,7 +84,6 @@ void unsigned_to_base(unsigned long num, int to_base, int width, char *result) {
     }
     result[i] = '\0';
 }
-
 
 void convert_from_decimal(long num, int to_base, char *result) {
     if (to_base == 10) {
