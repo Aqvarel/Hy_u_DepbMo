@@ -1,6 +1,11 @@
 #include "logic.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#define widthBin 32
+#define widthOct 11
+#define widthHex 8
 
 void initialize(struct AppContext* context) {
     context->fromBase = DEFAULT_VALUE;
@@ -27,43 +32,78 @@ void doValid(struct AppContext* context) {
     context->flag = flag;
 }
 
-int fromBase_to_ten(struct AppContext* context){
-    int flag = good;
-    doValid(context);
-    if(context->flag == good){
-        int output = 0;
-        int i = 0;
-        int isNegative = 0;
-        if(context->input[i] == '-'){
-            i++;
-            isNegative = 1;
+long convert_to_decimal(const char *num_str, int from_base) {
+    char *endptr;
+    long value = strtol(num_str, &endptr, from_base);
+    return value;
+}
+
+
+void unsigned_to_base(unsigned long num, int to_base, int width, char *result) {
+    char buffer[33] = {0};
+    int index = 0;
+    const char *digits = "0123456789ABCDEF";
+
+    if (num == 0) {
+        buffer[index++] = '0';
+    } else {
+        while (num > 0) {
+            buffer[index++] = digits[num % to_base];
+            num /= to_base;
         }
-        while(context->input[i] != '\0'){
-            output = (output * context->fromBase) + (context->input[i] - '0');
-            i++;
-        }
-        return isNegative ? -output : output;
     }
 
-    return context->flag = error_first;
+    if (width <= 0) {
+        if (to_base == 2)
+            width = widthBin;
+        else if (to_base == 8)
+            width = widthOct;
+        else if (to_base == 16)
+            width = widthHex;
+    }
+
+    int len = index;
+    int pad = (width > len) ? width - len : 0;
+    int i = 0;
+    for (i = 0; i < pad; i++) {
+        result[i] = '0';
+    }
+    for (int j = 0; j < len; j++, i++) {
+        result[i] = buffer[len - 1 - j];
+    }
+    result[i] = '\0';
 }
 
-void fromTen_to_ToBase(struct AppContext* context) {
-    int newInput = fromBase_to_ten(context);
-    if(newInput < 0){
-        newInput = -newInput;
-        itoa(newInput,context->answer,context->toBase);
-        int len = strlen(context->answer);
-        for(int i = len ; i >= 0; i--){
-            context->answer[i+1] = context -> answer[i];
-        }
-        context->answer[0] = '-';
-    }else{
-        itoa(newInput,context->answer,context->toBase);
+
+void convert_from_decimal(long num, int to_base, char *result) {
+    if (to_base == 10) {
+        sprintf(result, "%ld", num);
+        return;
+    }
+
+    unsigned long unsigned_num;
+    if (num < 0) {
+        unsigned_num = ((unsigned int)num);
+    } else {
+        unsigned_num = (unsigned long)num;
+    }
+
+    int width = 0;
+    if (to_base == 2)
+        width = widthBin;
+    else if (to_base == 8)
+        width = widthOct;
+    else if (to_base == 16)
+        width = widthHex;
+
+    unsigned_to_base(unsigned_num, to_base, width, result);
+}
+
+void doConvert(struct AppContext* context) {
+    doValid(context);
+    if (context->flag == good) {
+        long dec_value = convert_to_decimal(context->input, context->fromBase);
+        convert_from_decimal(dec_value, context->toBase, context->answer);
     }
 }
 
-void doConvert(struct AppContext* context){
-    doValid(context);
-    fromTen_to_ToBase(context);
-}

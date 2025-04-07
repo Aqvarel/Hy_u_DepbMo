@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "entrypoint.h"
+#include <string.h>
 
 #include "QMessageBox"
 MainWindow::MainWindow(QWidget *parent)
@@ -13,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->convert, &QPushButton::clicked, this, &MainWindow::onConvertClicked);
 
+    getData();
 
 }
 
@@ -33,8 +35,9 @@ void MainWindow::onConvertClicked(){
 }
 
 void MainWindow::getData(){
-    std::string str = ui -> fromBase ->text().toStdString();
-    context.input = str.c_str();
+    std::string str = ui->fromBase->text().toStdString();
+    strncpy(context.input, str.c_str(), sizeof(context.input) - 1);
+    context.input[sizeof(context.input) - 1] = '\0';
     context.fromBase = ui ->comboBox ->currentText().toInt();
     context.toBase = ui ->comboBox_2 ->currentText().toInt();
 }

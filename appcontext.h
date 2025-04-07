@@ -3,9 +3,10 @@
 #include <stdlib.h>
 
 
+
 struct AppContext {
-    char answer[64];
-    const char* input;
+    char answer[33];
+    char input[100];
     int fromBase;
     int toBase;
     int flag;

@@ -27,6 +27,7 @@ private:
     Ui::MainWindow *ui;
     struct AppContext context;
 
+
     void getData();
     void errors();
     void onConvertClicked();
