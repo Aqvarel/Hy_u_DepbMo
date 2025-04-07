@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->convert, &QPushButton::clicked, this, &MainWindow::onConvertClicked);
 
-    getData();
+    doOperation(Initialization, &context);
 
 }
 

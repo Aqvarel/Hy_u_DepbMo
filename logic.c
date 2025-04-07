@@ -7,6 +7,11 @@
 #define widthOct 11
 #define widthHex 8
 
+unsigned long to_twos_complement(long num) {
+    if (num >= 0) return (unsigned long)num;
+    return (unsigned long)(~(-num) + 1);
+}
+
 void initialize(struct AppContext* context) {
     context->fromBase = DEFAULT_VALUE;
     context->toBase = DEFAULT_VALUE;
@@ -81,12 +86,7 @@ void convert_from_decimal(long num, int to_base, char *result) {
         return;
     }
 
-    unsigned long unsigned_num;
-    if (num < 0) {
-        unsigned_num = ((unsigned int)num);
-    } else {
-        unsigned_num = (unsigned long)num;
-    }
+    unsigned long unsigned_num = to_twos_complement(num);
 
     int width = 0;
     if (to_base == 2)

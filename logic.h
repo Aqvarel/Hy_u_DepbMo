@@ -20,7 +20,7 @@ enum ErrorsGood{
 
 #define DEFAULT_VALUE 0
 
-
+unsigned long to_twos_complement(long num);
 void doConvert(struct AppContext* context);
 void doValid(struct AppContext* context);
 void initialize(struct AppContext* context);
