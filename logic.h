@@ -16,13 +16,16 @@ enum ErrorsGood{
     good = 0
 };
 
-
+struct AppParams {
+    char fromBaseString[SizeBaseText];
+    char toBaseString[SizeBaseText];
+};
 
 #define DEFAULT_VALUE 0
 
 unsigned long to_twos_complement(long num);
-void doConvert(struct AppContext* context);
-void doValid(struct AppContext* context);
+void doConvert(struct AppContext* context, struct AppParams* params);
+void doValid(struct AppContext* context, struct AppParams* params);
 void initialize(struct AppContext* context);
 
 #endif // LOGIC_H

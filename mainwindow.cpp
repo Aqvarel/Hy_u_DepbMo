@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->convert, &QPushButton::clicked, this, &MainWindow::onConvertClicked);
 
-    doOperation(Initialization, &context);
+    doOperation(Initialization, &context, NULL);
 
 }
 
@@ -25,11 +25,11 @@ MainWindow::~MainWindow()
 
 void MainWindow::onConvertClicked(){
     getData();
-    doOperation(Valid,&context);
+    doOperation(Valid,&context, &params);
     if(context.flag != good){
         errors();
     }else{
-        doOperation(Convert,&context);
+        doOperation(Convert,&context, &params);
         showAnswer();
     }
 }
@@ -38,8 +38,10 @@ void MainWindow::getData(){
     std::string str = ui->fromBase->text().toStdString();
     strncpy(context.input, str.c_str(), sizeof(context.input) - 1);
     context.input[sizeof(context.input) - 1] = '\0';
-    context.fromBase = ui ->comboBox ->currentText().toInt();
-    context.toBase = ui ->comboBox_2 ->currentText().toInt();
+    std::string str1 = ui -> comboBox -> currentText().toStdString();
+    strncpy(params.fromBaseString, str1.c_str(), SizeBaseText);
+    std::string str2 = ui -> comboBox_2 -> currentText().toStdString();
+    strncpy(params.toBaseString, str2.c_str(), SizeBaseText);
 }
 
 void MainWindow::showAnswer() {

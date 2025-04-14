@@ -26,7 +26,7 @@ public:
 private:
     Ui::MainWindow *ui;
     struct AppContext context;
-
+    struct AppParams params;
 
     void getData();
     void errors();

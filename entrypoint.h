@@ -14,7 +14,7 @@ enum Operation {
 
 
 
-void doOperation(enum Operation operation,  struct AppContext* context);
+void doOperation(enum Operation operation,  struct AppContext* context, struct AppParams* params);
 
 
 #endif // ENTRYPOINT_H

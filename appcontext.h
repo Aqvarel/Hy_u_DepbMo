@@ -2,11 +2,12 @@
 #define APPCONTEXT_H
 #include <stdlib.h>
 
-
+#define AnswerSize 33
+#define InputSize 100
 
 struct AppContext {
-    char answer[33];
-    char input[100];
+    char answer[AnswerSize];
+    char input[InputSize];
     int fromBase;
     int toBase;
     int flag;

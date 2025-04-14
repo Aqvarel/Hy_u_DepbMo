@@ -14,12 +14,18 @@ unsigned long to_twos_complement(long num) {
     return (unsigned long)(~(-num) + 1);
 }
 
+void convert_from_string_to_int(struct AppContext* context, struct AppParams* params) {
+    context->fromBase = atoi(params->fromBaseString);
+    context->toBase = atoi(params->toBaseString);
+}
+
 void initialize(struct AppContext* context) {
     context->fromBase = DEFAULT_VALUE;
     context->toBase = DEFAULT_VALUE;
 }
 
-void doValid(struct AppContext* context) {
+void doValid(struct AppContext* context,  struct AppParams* params) {
+    convert_from_string_to_int(context, params);
     int flag = good;
     int i = 0, j = 0;
     if(context->input[i] == '-' || context->input[i] == '+'){
@@ -104,8 +110,8 @@ void convert_from_decimal(long num, int to_base, char *result) {
     unsigned_to_base(unsigned_num, to_base, width, result);
 }
 
-void doConvert(struct AppContext* context) {
-    doValid(context);
+void doConvert(struct AppContext* context, struct AppParams* params) {
+    doValid(context, params);
     if (context->flag == good) {
         long dec_value = convert_to_decimal(context->input, context->fromBase);
         convert_from_decimal(dec_value, context->toBase, context->answer);
